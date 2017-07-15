@@ -16,4 +16,4 @@ before_install:
 
 script:
   - docker --version
-  - docker run -it --rm -v ${PWD}:/work "$TARGET" cargo build --target="$TARGET"
+  - docker run -it --rm -v ${PWD}:/work "$TARGET" cargo build --release --target="$TARGET"
