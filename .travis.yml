@@ -4,13 +4,16 @@ sudo: required
 services:
   - docker
 
+env:
+  matrix:
+    - TARGET=x86_64-unknown-linux-gnu
+    - TARGET=i686-unknown-linux-gnu
+    - TARGET=arm-unknown-linux-gnueabihf
+    - TARGET=armv7-unknown-linux-gnueabihf
+
 before_install:
-  - docker build --cache-from travis-docker-rust-cross/arm-unknown-linux-gnueabihf -t travis-docker-rust-cross/arm-unknown-linux-gnueabihf ci/docker/arm-unknown-linux-gnueabihf
+  - docker build -t "$TARGET" ci/docker/"$TARGET"
 
 script:
   - docker --version
-  - docker run -it --rm -v ${PWD}:/work travis-docker-rust-cross/arm-unknown-linux-gnueabihf cargo build --target=arm-unknown-linux-gnueabihf
-
-cache:
-  directories:
-  - $HOME/.cache/docker
+  - docker run -it --rm -v ${PWD}:/work "$TARGET" cargo build --target="$TARGET"
