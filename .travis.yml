@@ -10,3 +10,7 @@ before_install:
 script:
   - docker --version
   - docker run -it --rm -v ${PWD}:/work travis-docker-rust-cross/arm-unknown-linux-gnueabihf cargo build --target=arm-unknown-linux-gnueabihf
+
+cache:
+  directories:
+  - $HOME/.cache/docker
