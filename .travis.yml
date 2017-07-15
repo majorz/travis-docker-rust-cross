@@ -1,6 +1,17 @@
 dist: trusty
 sudo: required
+
 language: rust
 cache: cargo
+
 rust:
   - stable
+
+services:
+  - docker
+
+before_install:
+  - docker build -t travis-docker-rust-cross/arm-unknown-linux-gnueabihf ci/docker/arm-unknown-linux-gnueabihf
+
+script:
+  - docker run -it --rm -v ${PWD}:/work travis-docker-rust-cross/arm-unknown-linux-gnueabihf cargo build --target=arm-unknown-linux-gnueabihf
