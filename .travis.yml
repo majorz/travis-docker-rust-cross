@@ -1,5 +1,6 @@
 dist: trusty
 sudo: required
+language: generic
 services:
 - docker
 env:
@@ -12,7 +13,7 @@ install: true
 script: ci/script.sh
 before_deploy:
 - mkdir -p $TRAVIS_TAG
-- mv travis-docker-rust-cross $TRAVIS_TAG/travis-docker-rust-cross-$TRAVIS_TAG-$ARCH
+- mv target/$TARGET/release/travis-docker-rust-cross $TRAVIS_TAG/travis-docker-rust-cross-$TRAVIS_TAG-$ARCH
 deploy:
   provider: s3
   access_key_id: AKIAJOM2KL3KOMF4ZGHA
