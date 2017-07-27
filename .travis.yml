@@ -1,19 +1,29 @@
 dist: trusty
 sudo: required
-
 services:
-  - docker
-
+- docker
 env:
   matrix:
-    - TARGET=x86_64-unknown-linux-gnu
-    - TARGET=i686-unknown-linux-gnu
-    - TARGET=arm-unknown-linux-gnueabihf
-    - TARGET=armv7-unknown-linux-gnueabihf
-
-before_install:
-  - docker build -t "$TARGET" ci/docker/"$TARGET"
-
-script:
-  - docker --version
-  - docker run -it --rm -v ${PWD}:/work "$TARGET" cargo build --release --target="$TARGET"
+  - ARCH=armv7 TARGET=armv7-unknown-linux-gnueabihf
+  - ARCH=armv6 TARGET=arm-unknown-linux-gnueabihf
+  - ARCH=x86_32 TARGET=i686-unknown-linux-gnu
+  - ARCH=x86_64 TARGET=x86_64-unknown-linux-gnu
+install: true
+script: ci/script.sh
+before_deploy:
+- mkdir -p $TRAVIS_TAG
+- mv travis-docker-rust-cross $TRAVIS_TAG/travis-docker-rust-cross-$TRAVIS_TAG-$ARCH
+deploy:
+  provider: s3
+  access_key_id: AKIAJOM2KL3KOMF4ZGHA
+  secret_access_key:
+    secure: Y8uM817pacSZ916FD+r3FjYirCbruXBwRNAq/nd1UGd/CdU4kv9euV01aR0Eba5d+VBDKmT/7+3qWYK68+MCflvQXO3KvcBumBOarLBGcImyTBPErGe94H5ahpVKm+HpeYENW26XmwdwaWYup4oVeyB7qkSE3vDbh0mO37DdOxLXW9kb3OQyyWW2PKmd/ZMRk0bcZN730iFIL9Ez+Lbyu6rCFjLdk1qU/K2GZaQ6BkUttZFPa8oQjBxpZgmAJTlZ0133hpGUoowGI1HYMyq+VdE79L6DmEvjzRsVQJxtySynVjAmptVUpP5VLzIAnSzCi2ZTjIWqvTsuFRPFCu0lfWD10yNLQJ+pyVNfxEO0nX7L/3M704t19cbhHY95ZVgWuaMWbj3rFFpyPEYozyGsWVnY3zV9NCpUI7M4yxybg+HhvoXqoiOWLPsZZLBO+lEY4UMj7og6Gx23WybkbdwHCgJbTxNGLoNdnF7azDmDKt0FAk+McqcnTSu9FOxv3FOLah1/qi6/Oog+Di7HiGjXYLk5jwuvQGvhaKAYOMWkOMafrAqa+rtP/bwrCiGWQvpLJMVTAvoseACSjs/QYFepMv800h45qTpJM6anHw/BPs4TKCSEP3KLDhB99aLaoD4CTcijOO4SSsyK8KC6LzTvwjPyxDPjCPfDDATT82VF8eg=
+  skip_cleanup: true
+  overwrite: true
+  bucket: travis-docker-rust-cross
+  local-dir: "$TRAVIS_TAG"
+  upload-dir: travis-docker-rust-cross/$TRAVIS_TAG
+  acl: public_read
+  on:
+    branch: master
+    tags: true
