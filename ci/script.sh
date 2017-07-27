@@ -7,4 +7,4 @@ docker build -t $TARGET ci/docker/$TARGET
 
 docker run -it --rm -v ${PWD}:/work $TARGET cargo build --release --target=$TARGET
 
-${STRIP} target/$TARGET/release/$BINARY
+eval $STRIP target/$TARGET/release/$BINARY
