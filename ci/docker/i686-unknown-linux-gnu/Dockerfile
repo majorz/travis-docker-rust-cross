@@ -17,4 +17,6 @@ ENV PKG_CONFIG_ALLOW_CROSS 1
 
 ENV PKG_CONFIG_LIBDIR /usr/lib/i386-linux-gnu/pkgconfig/
 
+ENV STRIP=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-strip
+
 VOLUME /work
