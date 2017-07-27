@@ -17,6 +17,6 @@ ENV PKG_CONFIG_ALLOW_CROSS 1
 
 ENV PKG_CONFIG_LIBDIR /usr/lib/arm-linux-gnueabihf/pkgconfig/
 
-ENV STRIP=/usr/bin/${CROSS_TRIPLE}-strip
+RUN ln -s /usr/bin/${CROSS_TRIPLE}-strip /usr/bin/stripbin
 
 VOLUME /work

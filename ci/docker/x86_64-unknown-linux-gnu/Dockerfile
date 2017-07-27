@@ -10,6 +10,6 @@ RUN ln -s /root/.cargo/bin/cargo /usr/local/sbin/cargo && \
     ln -s /root/.cargo/bin/rustdoc /usr/local/sbin/rustdoc && \
     ln -s /root/.cargo/bin/rustup /usr/local/sbin/rustup
 
-ENV STRIP=/usr/bin/${CROSS_TRIPLE}-strip
+RUN ln -s /usr/bin/${CROSS_TRIPLE}-strip /usr/bin/stripbin
 
 VOLUME /work
