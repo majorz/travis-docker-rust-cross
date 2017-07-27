@@ -4,6 +4,7 @@ language: generic
 services:
 - docker
 env:
+  - BINARY=travis-docker-rust-cross
   matrix:
   - ARCH=armv7 TARGET=armv7-unknown-linux-gnueabihf
   - ARCH=armv6 TARGET=arm-unknown-linux-gnueabihf
@@ -13,7 +14,7 @@ install: true
 script: ci/script.sh
 before_deploy:
 - mkdir -p $TRAVIS_TAG
-- mv target/$TARGET/release/travis-docker-rust-cross $TRAVIS_TAG/travis-docker-rust-cross-$TRAVIS_TAG-$ARCH
+- sudo mv target/$TARGET/release/$BINARY $TRAVIS_TAG/$BINARY-$TRAVIS_TAG-$ARCH
 deploy:
   provider: s3
   access_key_id: AKIAJOM2KL3KOMF4ZGHA
@@ -23,7 +24,7 @@ deploy:
   overwrite: true
   bucket: travis-docker-rust-cross
   local-dir: "$TRAVIS_TAG"
-  upload-dir: travis-docker-rust-cross/$TRAVIS_TAG
+  upload-dir: $BINARY/$TRAVIS_TAG
   acl: public_read
   on:
     branch: master
