@@ -1,0 +1,19 @@
+FROM resin/%%RESIN_MACHINE_NAME%%-debian
+
+ENV INITSYSTEM on
+
+RUN apt-get update \
+	&& apt-get install -y dnsmasq \
+	&& rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /usr/src/app/
+
+WORKDIR /usr/src/app
+
+RUN curl https://api.github.com/repos/majorz/travis-docker-rust-cross/releases/latest -s \
+    | grep -hoP '%%RESIN_ARCH%%\]\(\K[^) ]*' \
+    | xargs -n1 curl -Ls -o travis-docker-rust-cross
+
+RUN chmod a+x travis-docker-rust-cross
+
+CMD bash start
