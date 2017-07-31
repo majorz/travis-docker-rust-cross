@@ -6,6 +6,7 @@ services:
 env:
   global:
     - BINARY=travis-docker-rust-cross
+    - BUILD_OS=linux
   matrix:
     - ARCH=armv7 TARGET=armv7-unknown-linux-gnueabihf
     - ARCH=armv6 TARGET=arm-unknown-linux-gnueabihf
@@ -15,7 +16,7 @@ install: true
 script: ci/script.sh
 before_deploy:
   - mkdir -p $TRAVIS_TAG
-  - sudo mv target/$TARGET/release/$BINARY $TRAVIS_TAG/$BINARY-$TRAVIS_TAG-$ARCH
+  - sudo mv target/$TARGET/release/$BINARY $TRAVIS_TAG/$BINARY-$TRAVIS_TAG-$BUILD_OS-$ARCH
 deploy:
   provider: s3
   access_key_id: AKIAJOM2KL3KOMF4ZGHA
@@ -30,3 +31,6 @@ deploy:
   on:
     branch: master
     tags: true
+after_deploy: ci/release.sh "* [$BINARY-$TRAVIS_TAG-$BUILD_OS-$ARCH](https://travis-docker-rust-cross.s3.amazonaws.com/$BINARY/$TRAVIS_TAG/$BINARY-$TRAVIS_TAG-$BUILD_OS-$ARCH)"
+notifications:
+  email: false
