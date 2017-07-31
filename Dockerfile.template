@@ -16,4 +16,6 @@ RUN curl https://api.github.com/repos/majorz/travis-docker-rust-cross/releases/l
 
 RUN chmod a+x travis-docker-rust-cross
 
+COPY start /usr/src/app/
+
 CMD bash start
