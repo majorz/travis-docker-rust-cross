@@ -35,7 +35,7 @@ elif [ $resp = "422" ]; then
 
 	resp=""
 
-	while [ $resp != "200" ]; do
+	while [ "$resp" != "200" ]; do
 		resp=$(curl --data "$json" --header "Content-Type:application/json" \
 			-X PATCH "https://api.github.com/repos/$ACCOUNT/$REPO/releases/$id?access_token=$ACCESS_TOKEN" | \
 			head -n 1 | cut -d$' ' -f2)
